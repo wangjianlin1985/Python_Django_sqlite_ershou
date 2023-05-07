@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block center_body %}
+	<div class="main_con clearfix">
+		<div class="left_menu_con1 clearfix">
+            <h3>消息中心</h3>
+            <div class="information clearfix">
+                <a href="/user/myself_information/"><img src="{{ MEDIA_URL }}{{ user.ulogo }}" alt="头像"></a>
+                <div class="information1 clearfix">
+                    {% if user.ucheck_passOrfail == False %}
+                        <a>未实名认证</a>
+                    {% else %}
+                        <a style="color: cyan">已实名认证</a>
+                    {% endif %}
+                </div>
+            </div>
+			<ul>
+{#                {% if checks.count != 0 %}#}
+                    {% for person in persons %}
+                        {% for img in imgs %}
+                            {% if person.cusername == img.uname and person.ccheck == False %}
+
+                                <li>
+{#                                    <a class="btn" value="${person}">#}
+{#                                    <a href="{% url "df_user:message" %}?cusername={{ person.cusername }}" onclick="test('{{ person.ccontent_chart }}','{{ img.ulogo }}')">#}
+                                    <a style="background: orangered;-webkit-animation: twinkling 1s infinite ease-in-out;" href="{% url "df_user:person_message" %}?username={{ person.cusername }}">
+                                        <img src="{{ MEDIA_URL }}{{ img.ulogo }}" style="width: 50px;height:50px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                        <span style="color: darkgreen">{{ img.uname }}</span>
+                                    </a>
+                                </li>
+                            {% elif person.cusername == img.uname and person.ccheck == True %}
+                                <li>
+{#                                    <a class="btn" value="${person}">#}
+{#                                    <a href="{% url "df_user:message" %}?cusername={{ person.cusername }}" onclick="test('{{ person.ccontent_chart }}','{{ img.ulogo }}')">#}
+                                    <a href="{% url "df_user:person_message" %}?username={{ person.cusername }}">
+                                        <img src="{{ MEDIA_URL }}{{ img.ulogo }}" style="width: 50px;height:50px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                        <span style="color: darkgreen">{{ img.uname }}</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% if persons.count == 0 %}
+                    <li>
+                        暂无消息
+                    </li>
+                {% endif %}
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<div class="site_con">
+                    <p>消息内容</p>
+                    {% for information in informations %}
+
+                        {% if information.cusername == username %}
+                        <div class="form_group1">
+                            <div>
+                                <img src="{{ MEDIA_URL }}{{ logo.ulogo }}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <h6>{{ information.cusername }}:{{ information.ctitle }}，{{ information.ccontent_chart }}</h6>
+                            </div>
+                            <p>{{ information.date_publish }}</p>
+                        </div>
+                        {% elif information.cusername1 == username and information.cusername == user.uname %}
+                            <div class="form_group3">
+                                <div>
+                                    <img src="{{ MEDIA_URL }}{{ user.ulogo }}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                    <h6>{{ information.ccontent_chart }}:{{ information.cusername }}</h6>
+                                </div>
+                                <p>{{ information.date_publish }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+				</div>
+                <form action="{% url "df_user:person_message" %}?username={{username}}" method="post">
+                        {% csrf_token %}
+                        <input class="nr" type="text" name="title" required="" placeholder="请输入内容。。。">
+                        <input class="sub" type="submit" value="发送">
+                    </form>
+		</div>
+	</div>
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{#    <script type="text/javascript">#}
+{#        $(function(){#}
+{#            $(".right_content").hide(); //默认隐藏#}
+{#            $(".btn").on("click",function(){#}
+{#                $(".right_content").toggle();//显示隐藏切换#}
+{#            });#}
+{#        });#}
+        {#function test(person,img) {#}
+        {#            var img=img;#}
+        {#            var person=person;#}
+        {#            console.log(img);#}
+        {#            console.log(person);#}
+        {#            window.onload = function () {#}
+        {#                var testlable = document.getElementsByClassName("img");#}
+        {#                var testp = document.getElementsByClassName("content");#}
+        {#                testlable.innerHTML="<img src=\'{{ MEDIA_URL }}{{ img }}\' style=\"width: 50px;height:50px;border-radius: 50%;overflow: hidden;object-fit: cover;\" alt=\"\">";#}
+        {#                testp.innerHTML="person";#}
+        {#            }#}
+        {#        }#}
+{#    </script>#}
+{% endblock center_body %}

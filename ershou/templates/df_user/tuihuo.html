@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script>
+    $(function () {
+        $('.col07').each(function () {
+            count = $(this).prev().text();
+            price = $(this).prev().prev().text();
+            $(this).html(parseFloat(count,2)*parseFloat(price,2)+'元')
+        })
+    })
+    </script>
+
+{% endblock %}
+
+{% block center_body %}
+	<h3 class="common_title">填写信息</h3>
+	
+	<div class="common_list_con clearfix">
+		<div class="site_con">
+					<form action="{% url "df_user:tuihuo" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form_group">
+							<label>商品名称：</label>
+							<input type="text" name="title">
+						</div>
+                        <div class="form_group">
+							<label>收件人姓名：</label>
+							<input type="text" name="username">
+						</div>
+                        <div class="form_group">
+							<label>寄件人姓名：</label>
+							<input type="text" name="username1">
+						</div>
+                        <div class="form_group">
+							<label>身份证号码：</label>
+							<input type="text" name="person_number">
+						</div>
+                        <div class="form_group">
+							<label>订单号：</label>
+							<input type="text" name="order_number">
+						</div>
+                        <div class="form_group">
+                            <label>快递类型：</label>
+                            <select name="kuaidi">
+                                <option value="中通">中通</option>
+                                <option value="圆通">圆通</option>
+                                <option value="申通">申通</option>
+                                <option value="韵达">韵达</option>
+                                <option value="天天">天天</option>
+                                <option value="EMS">EMS</option>
+                                <option value="顺风">顺风</option>
+                                <option value="其它">其它</option>
+                            </select>
+                        </div>
+                        <div class="form_group">
+                            <label>快递单号：</label>
+                            <input type="text" name="kuaidi_number">
+                        </div>
+                        <div class="form_group">
+                            <label>收货地址：</label>
+                            <input type="text" name="address">
+                        </div>
+                        <div class="form_group">
+                            <label>发货地址：</label>
+                            <input type="text" name="address1">
+                        </div>
+                        <div class="form_group form_group2">
+                            <label>退货理由：</label>
+                            <textarea class="site_area" name="text" ></textarea>
+                        </div>
+						<input type="submit" name="" value="提交" class="info_submit">
+					</form>
+				</div>
+
+	</div>
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock center_body %}
+

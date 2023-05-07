@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block center_body %}
+    <div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="/list1_1_1" class="fruit">书籍</a></li>
+					<li><a href="/list2_1_1" class="seafood">家电</a></li>
+					<li><a href="/list3_1_1" class="meet">衣物</a></li>
+					<li><a href="/list4_1_1" class="egg">出行</a></li>
+					<li><a href="/list5_1_1" class="vegetables">乐器</a></li>
+					<li><a href="/list6_1_1" class="ice">智能</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="{% url "df_goods:index" %}">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">跳蚤市场手机app版</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+    <script type="text/javascript">
+        if({{ search_status }}==0){
+            alert("您的查询结果为空，为您推荐以下商品");
+        }
+    </script>
+	<div class="breadcrumb">
+		全部分类
+{#        {{ title }}#}
+{#		{% if id|default:' ' != ' ' %}#}
+        > 商品详情
+{#		{% endif %}#}
+	</div>
+
+    <div class="main_wrap clearfix">
+        <ul class="goods_type_list clearfix">
+            {%  for item in page %}
+            <li>
+                <a href="/{{ item.id }}/"><img src="{{ MEDIA_URL }}{{ item.gpic }}"></a>
+                <h4><a href="/{{ item.id }}/">{{ item.gtitle }}</a></h4>
+                <div class="operate">
+                    <span class="prize">￥{{ item.gprice }}</span>
+                    <span class="unit">{{ item.gunit }}</span>
+                    <a href="/cart/add{{ item.id }}_1/" class="add_goods" title="加入购物车"></a>
+{#						<a href="javasript:;/" class="add_goods" title="加入购物车"></a>#}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="pagenation">
+{#                判断是否是第一页#}
+            {% if page.has_previous %}
+                <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ page.previous_page_number }}">上一页</a>
+            {% endif %}
+
+            {% for pindex in paginator.page_range %}
+                {% if pindex == page.number %}
+                    <a href="#" class="active">{{ pindex }}</a>
+                {% else %}
+                    <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ pindex }}">{{ pindex }}</a>
+                {% endif %}
+            {% endfor %}
+
+{#                是否又第二页#}
+            {% if page.has_next %}
+                <a href="{% url "df_user:ordinary_search" %}?q={{ query }}&amp;page={{ page.next_page_number }}">下一页></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock center_body %}

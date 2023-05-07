@@ -1,0 +1,294 @@
+{% extends 'df_goods/base.html' %}
+
+{% block head %}
+    <script type="text/javascript">
+
+{#  通过绑定js事件实现随着商品数量的增长商品总价上涨#}
+    function plus() {
+        num = parseFloat($('.num_show').val());
+        kucun = parseFloat($('.goods_kucun').html());
+        if(num<=kucun){
+            $('.num_show').val(num+1);
+            $('.num_show').blur();
+        }
+    }
+
+    function minus() {
+        num = parseFloat($('.num_show').val());
+        if(num>1)
+        {
+            $('.num_show').val(num-1);
+            $('.num_show').blur();
+        }
+        else {
+            {#商品的数量不可以小于1#}
+        }
+    }
+
+    $(function () {
+        $('.num_show').blur(function () {
+
+        num = parseInt($('.num_show').val());
+
+        if(num<=1)
+             num = 1;
+
+         kucun = parseInt($('.goods_kucun').text());
+
+         if(num>=kucun)
+             num = kucun;
+
+         price = parseFloat($('#gprice').text());
+         total = num*price;
+         $('.num_show').val(num);
+         $('#gtotal').text(total.toFixed(2)+'元');
+
+{#             $('add_cart').attr('href', '/cart/add'+$('gid').val())#}
+        });
+    });
+    </script>
+
+{% endblock head %}
+
+{% block center_content %}
+{#  回复评论  #}
+<div class="shadow clearfix" id="shadow">
+    <div class="close clearfix">
+        <div class="model clearfix">
+          <form action="" id="formDetil" class="easyui-form"   method="POST" >
+              {% csrf_token %}
+                    <div  class="table-responsive" style="padding-left: 20%">
+                        <tr>
+                            <td style="border: none; padding-left: 0;">
+                                <img style="width: 100px;height: 100px;border-radius: 50%;overflow: hidden;object-fit: cover;" src="{{ MEDIA_URL }}{{ Content.clogo }}" alt=" " class="img-responsive" />
+                            </td><br /><br />
+                            <td style="border: none;padding-left: 20px;">
+                                用户名：{{Content.cusername}}
+                            </td><br /><br />
+                            <td style="border: none; padding-left: 10px;">
+                                用户评论：<p>{{Content.cuser_content}}</p>
+                            </td><br /><br />
+                            <td style="border: none; padding-left: 10px;">
+                                <textarea type="text" name="text" style="width: 300px;height:200px;" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '你的回复...';}" required="">你的回复...</textarea>
+                            </td><br /><br />
+                        </tr>
+                        <input type="submit" value="提交">
+                    </div>
+          </form>
+        </div>
+    </div>
+  </div>
+
+{#  回复评论到此为止  #}
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img src="{{ MEDIA_URL }}{{ goods.gpic }}" style="width: 350px;height: 350px;"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ goods.gtitle }}（卖家昵称：{{ goods.gunit }}）</h3>
+			<p>{{ goods.gjianjie }}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em id="gprice">{{ goods.gprice }}</em></span>
+				<span class="show_unit">库  存：<span class="goods_kucun">{{ goods.gkucun }}</span></span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1">
+					<a href="javascript:plus();" class="add fr">+</a>
+					<a href="javascript:minus();" class="minus fr">-</a>
+				</div>
+			</div>
+			<div class="total">总价：<em id="gtotal">{{ goods.gprice }}元</em></div>
+			<div class="operate_btn">
+                {% if request.session.user_name|default:'' != '' %}
+                    <a href="javascript:;" class="buy_btn" id="buy_now">立即购买</a>
+                {% else %}
+                    <a href="{% url "df_user:login" %}" class="buy_btn">立即购买</a>
+                {% endif %}
+                {% if request.session.user_name|default:'' != '' %}
+                    <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+                {% else %}
+                    <a href="{% url "df_user:login" %}" class="add_cart" id="add_cart">加入购物车</a>
+                {% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+                    {% for goods in news %}
+					<li>
+						<a href="/detail/{{ goods.id }}"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+						<h4><a href="/detail/{{ goods.id }}">{{ goods.gtitle }}</a></h4>
+						<div class="prize">￥{{ goods.gprice }}</div>
+					</li>
+                    {%  endfor %}
+                </ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="detail_tab_content"><a href="/detail/{{ goods.id }}/">商品介绍</a></li>
+				<li class="active">评论</li>
+			</ul>
+
+			<div class="tab_content">
+				<div role="tabpanel" class="tab-pane fade bootstrap-tab-text" id="profile" aria-labelledby="profile-tab">
+								<div class="bootstrap-tab-text-grids">
+									{% for goodsContent in page %}
+                                            <div class="bootstrap-tab-text-grid">
+                                                <div class="bootstrap-tab-text-grid-left">
+                                                    <a href="/user/shoper_information/{{ goodsContent.cusername }}/"><img style="width: 100px;height: 100px;border-radius: 50%;overflow: hidden;object-fit: cover;" src="{{ MEDIA_URL }}{{ goodsContent.clogo }}" alt=" " class="img-responsive" /></a>
+                                                </div>
+                                                <div class="bootstrap-tab-text-grid-right">
+                                                    <ul>
+                                                        <li><a href="/shoper_information/{{ goodsContent.cusername }}/">{{goodsContent.cusername}}</a></li>
+                                                        <li><a href="javascript:void(0)" onclick="quote_comment('${goodsContent}')" class="btn"><span class="glyphicon glyphicon-share" aria-hidden="true"></span>{{goodsContent.date_publish}}</a></li>
+                                                    </ul>
+                                                    <p>
+                                                        {{goodsContent.cuser_content}}
+                                                        {% if goodsContent.cpic == "" %}
+                                                            (未上传图片)
+                                                        {% else %}
+                                                            <img style="width: 100px;height: 100px;overflow: hidden;object-fit: cover;" src="{{ MEDIA_URL }}{{ goodsContent.cpic }}" alt=" " class="img-responsive" />
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                                <div class="clearfix">
+                                                </div>
+                                            </div>
+                                    {% endfor %}
+                                    {% if goodsContents.count == 0 %}
+                                        <div class="bootstrap-tab-text-grid">
+                                                <p>暂无评论</p>
+                                            </div>
+                                    {% endif %}
+                            {#      分页显示      #}
+            <div class="pagenation">
+{#                判断是否是第一页#}
+                {% if page.has_previous %}
+                    <a href="/content/{{ goods.id }}/{{ page.previous_page_number }}">上一页</a>
+                {% endif %}
+
+                {% for pindex in paginator.page_range %}
+                    {% if pindex == page.number %}
+                        <a href="/content/{{ goods.id }}/{{ pindex }}" class="active">{{ pindex }}</a>
+                    {% else %}
+                        <a href="/content/{{ goods.id }}/{{ pindex }}">{{ pindex }}</a>
+                    {% endif %}
+                {% endfor %}
+
+{#                是否为第二页#}
+                {% if page.has_next %}
+				<a href="/content/{{ goods.id }}/{{ page.next_page_number }}">下一页></a>
+                {% endif %}
+			</div>
+                                {% for goodsOrderDetailInfo in goodsOrderDetailInfos %}
+                                    {% if goodsOrderDetailInfo.username == user.uname and goodsOrderDetailInfo.goods_id == goods.id  %}
+									<div class="add-review">
+										<h4>评论一下</h4>
+										<form action="{% url "df_goods:content" goods.id 1 %}" method="post" enctype="multipart/form-data">
+{#                                        <form action="{% url "df_goods:content" goods.id pindex %}" method="post" enctype="multipart/form-data">#}
+											{% csrf_token %}
+                                            <label>上传图片</label><input type="file" name="pic">
+                                            <textarea type="text" name="text" required="">Message...</textarea>
+{#											<input type="submit" value="提交" id="name" οnblur="checkName()">#}
+                                            <input type="submit" value="提交">
+										</form>
+									</div>
+                                    {% endif %}
+                                {% endfor %}
+								</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="add_jump"></div>
+
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".buy_btn").click(function () {
+            num = parseInt($('.num_show').val());
+            $.get('/cart/add{{ goods.id }}_'+num+'/',function (data) {
+                $('#show_count').text(data.count);
+            });
+            location.href = "/cart/";
+
+        });
+
+        $('#add_cart').click(function() {
+
+            var $add_x = $('#add_cart').offset().top;
+            var $add_y = $('#add_cart').offset().left;
+
+            var $to_x = $('#show_count').offset().top;
+            var $to_y = $('#show_count').offset().left;
+
+            $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+
+            $('#add_cart').click(function() {
+
+    {#            		    先判断是否登录#}
+                if ($('.login_btn').text().indexOf('登录') >= 0) {
+                    alert('请登陆后购买');
+                    location.href('/user/login/');
+                    return;
+                }
+
+    {#                        购物车添加动画#}
+                $(".add_jump").stop().animate({
+                        'left': $to_y + 7,
+                        'top': $to_x + 7
+                    },
+                    "fast", function () {
+                        $(".add_jump").fadeOut('fast', function () {
+                            count = $('.num_show').val();
+                            $('#show_count').html(count);
+                    });
+                });
+
+                num = parseInt($('.num_show').val());
+                $.get('/cart/add{{ goods.id }}_'+num+'/',function (data) {
+                    $('#show_count').text(data.count);
+                });
+            });
+        });
+
+    });
+    </script>
+    {#回复评论js#}
+<script type="text/javascript">
+    let btn = document.getElementsByClassName('btn');
+    let shadow = document.getElementById('shadow');
+    for (var i = 0, len = btn.length; i < len; i++) {
+        btn[i].addEventListener('click', function (e) {
+            shadow.className = 'shadow show';
+            return false
+        }, false);
+        shadow.addEventListener('click', function(e) {
+          let target = e.target;
+          let _class = target.className;
+          if(_class.includes('shadow') || _class.includes('close')) {
+            shadow.className = 'shadow'
+          }
+          return false
+         }, false);
+    }
+</script>
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock center_content %}

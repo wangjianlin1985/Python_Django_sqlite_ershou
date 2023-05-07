@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+{% load staticfiles %}
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>跳蚤市场 | {{ title }}</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+{#    <link href="/static/css/style1.css" rel="stylesheet" type="text/css">#}
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+{#	<script type="text/javascript" src="/static/js/register.js"></script>#}
+    {% block head %}{% endblock head %}
+    {% block script %}{% endblock script %}
+</head>
+<body>
+
+{% block body %}{% endblock body %}
+
+    <div class="footer no-mp">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>
+		</div>
+		<p>CopyRight © 2020 大佬说的都对 All Rights Reserved</p>
+		<p>电话：***-*******    京ICP备********号</p>
+	</div>
+
+</body>
+</html>

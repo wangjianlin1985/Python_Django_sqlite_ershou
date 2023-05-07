@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html>
+{% load staticfiles %}
+<head>
+<title>{{Content.cusername}}的买卖中心</title>
+<link href="/static/asserts/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/asserts/js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="/static/asserts/css/style.css" rel='stylesheet' type='text/css' />
+ <!-- Custom Theme files -->
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="keywords" content="" />
+<!--<link href='http://fonts.googleapis.com/css?family=Asap:400,700,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'> -->
+ <!---- start-smoth-scrolling---->
+<script type="text/javascript" src="/static/asserts/js/move-top.js"></script>
+<script type="text/javascript" src="/static/asserts/js/easing.js"></script>
+	<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+ <!---- start-smoth-scrolling---->
+</head>
+	<body>
+		<!-- container -->
+			<!-- header -->
+			<div id="home" class="header">
+				<div class="container">
+				<!-- top-hedader -->
+				<div class="top-header">
+					<!-- /logo -->
+					<!--top-nav---->
+					<div class="top-nav">
+					<div class="navigation">
+					<div class="logo">
+						<h1><a href="/"><span>跳</span>蚤市场首页</a></h1>
+					</div>
+					<div class="navigation-right">
+						<span class="menu"><img src="../../static/asserts/images/menu.png" alt=" " /></span>
+						<nav class="link-effect-3" id="link-effect-3">
+							<ul class="nav1 nav nav-wil">
+								<li class="active"><a href="/user/info/">返回用户中心</a></li>
+								<li><a class="scroll" data-hover="出售记录" href="#work">出售记录</a></li>
+								<li><a class="scroll" data-hover="跳蚤商品" href="#port">跳蚤商品</a></li>
+								<li><a class="scroll" data-hover="联系我" href="#contact">联系我</a></li>
+							</ul>
+						</nav>
+							<!-- script-for-menu -->
+								<script>
+								   $( "span.menu" ).click(function() {
+									 $( "ul.nav1" ).slideToggle( 300, function() {
+									 // Animation complete.
+									  });
+									 });
+								</script>
+							<!-- /script-for-menu -->
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<!-- /top-hedader -->
+				</div>
+			<div class="banner-info">
+				<div class="col-md-7 header-right">
+					<h1>Hi !</h1>
+					<h6>{{ user.uname }}，这是我的资料哦。</h6>
+					<ul class="address">
+
+					<li>
+							<ul class="address-text">
+								<li><b>用户名</b></li>
+								<li>{{ shoper.uname }}</li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>性别</b></li>
+								<li>
+                                  {% if shoper.usex %}
+                                    {{ shoper.usex }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>年龄</b></li>
+								<li>
+                                  {% if shoper.uage %}
+                                    {{ shoper.uage }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>发货地址 </b></li>
+								<li>
+                                  {% if shoper.uaddress %}
+                                    {{ shoper.uaddress }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>邮箱 </b></li>
+								<li>
+                                  {% if shoper.uemail %}
+                                    {{ shoper.uemail }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>联系方式 </b></li>
+								<li>
+                                  {% if shoper.uphone %}
+                                    {{ shoper.uphone }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+                        <li>
+							<ul class="address-text">
+								<li><b>个性宣言</b></li>
+								<li>
+                                  {% if shoper.upersonInf %}
+                                    {{ shoper.upersonInf }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+
+					</ul>
+				</div>
+				<div class="col-md-5 header-left">
+					<img src="{{ MEDIA_URL }}{{ shoper.ulogo }}" style="width:379px;height:379px;overflow: hidden;object-fit: cover;" alt="">
+				</div>
+				<div class="clearfix"> </div>
+
+		      </div>
+			</div>
+		</div>
+	</div>
+
+			<!--work-experience-->
+	<div id="work" class="work">
+		<div class="container">
+			<div class="service-head text-center">
+						<h4>WHAT I SOID</h4>
+						<h3><span>出售记录</span></h3>
+						<span class="border one"></span>
+					</div>
+					<div class="time-main w3l-agile">
+							<div class="col-md-6 year-info">
+							   <ul class="year">
+								   {% for orderinf in orderinfs %}
+                                       <li>{{ orderinf.datatime }}</li>
+                                   {% endfor %}
+                                   {% if orderinfs.count == 0 %}
+                                       <li>暂无购买信息</li>
+                                   {% endif %}
+								   <div class="clearfix"></div>
+								</ul>
+							</div>
+					                        <ul class="col-md-6 timeline">
+                                                            {% for orderinf in orderinfs %}
+                                                                {% for inf in infos %}
+                                                                    {% if orderinf.goods_id == inf.id %}
+																<li>
+																  <div class="timeline-badge info"><i class="glyphicon glyphicon-briefcase"></i></div>
+																  <div class="timeline-panel">
+																	<div class="timeline-heading">
+																	  <h4 class="timeline-title">买家昵称：{{ orderinf.username }}</h4>
+																	</div>
+																	<div class="timeline-body">
+                                                                      <h6 class="timeline-title">商品名称：{{ inf.gtitle }}</h6>
+																	  <p>
+                                                                          <a href="/detail/{{ orderinf.goods_id }}/"><img src="{{ MEDIA_URL }}{{ inf.gpic }}" style="width:50px;height:50px;overflow: hidden;object-fit: cover;" alt=""></a>
+                                                                          该买家在{{ orderinf.datatime }}购买了该商品！
+                                                                      </p>
+																	</div>
+																  </div>
+																</li>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                            {% if orderinfs.count == 0 %}
+                                                                <li>暂无购买信息</li>
+                                                            {% endif %}
+															</ul>
+								<div class="clearfix"></div>
+								</div>
+						</div>
+				</div>
+	<!--//work-experience-->
+
+		<!-- portfolio -->
+<div class="portfolio" id="port">
+				<div class="service-head text-center">
+						<h4>MY GOODS</h4>
+						<h3><span>上架商品</span></h3>
+						<span class="border"></span>
+					</div>
+			<div class="portfolio-grids">
+				<script src="/static/asserts/js/easyResponsiveTabs.js" type="text/javascript"></script>
+				<script type="text/javascript">
+									$(document).ready(function () {
+										$('#horizontalTab').easyResponsiveTabs({
+											type: 'default', //Types: default, vertical, accordion
+											width: 'auto', //auto or any width like 600px
+											fit: true   // 100% fit in a container
+										});
+									});
+
+				</script>
+				<div class="sap_tabs">
+					<div id="horizontalTab" style="display: block; width: 100%; margin: 0px;">
+						<ul class="resp-tabs-list">
+							<li class="resp-tab-item" aria-controls="tab_item-0" role="tab"><span>ALL</span></li>
+							<li class="resp-tab-item" aria-controls="tab_item-1" role="tab"><span>书籍</span></li>
+							<li class="resp-tab-item" aria-controls="tab_item-2" role="tab"><span>衣物</span></li>
+							<li class="resp-tab-item" aria-controls="tab_item-3" role="tab"><span>出行</span></li>
+						</ul>
+					{% if goods.count == 0 %}
+						<div class="resp-tabs-container1">
+                    {% else %}
+                        <div class="resp-tabs-container">
+                    {% endif %}
+							<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
+                              {% for good in goods %}
+                                  <div class="col-md-3 team-gd ">
+
+										<a href="/detail/{{ good.id }}/" class="portfolio-link b-link-diagonal b-animate-go" data-toggle="modal">
+                                            <img src="{{ MEDIA_URL }}{{ good.gpic}}"style="width:300px;height:300px;" alt="">
+										</a>
+
+								  </div>
+                              {% endfor %}
+                              {% if goods.count == 0 %}
+                                    <p>该用户没有上架商品</p>
+                              {% endif %}
+							</div>
+							<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-1">
+								<div class="col-md-3 team-gd ">
+									<div class="thumb">
+										<a href="#portfolioModal5" class="portfolio-link b-link-diagonal b-animate-go" data-toggle="modal"><img src="images/pic10.jpg" alt="">
+
+										</a>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-2">
+								<div class="col-md-3 team-gd ">
+
+										<a href="#portfolioModal2" class="portfolio-link b-link-diagonal b-animate-go" data-toggle="modal"><img src="images/pic9.jpg" alt="">
+
+										</a>
+
+								</div>
+								<div class="clearfix"></div>
+							</div>
+								<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-3">
+								<div class="col-md-3 team-gd ">
+
+										<a href="#portfolioModal5" class="portfolio-link b-link-diagonal b-animate-go" data-toggle="modal"><img src="images/pic10.jpg" alt="">
+
+										</a>
+
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+	<!-- //portfolio -->
+
+			<!-- /header -->
+<div class="footer" id="contact">
+	<div class="container">
+	<div class="service-head one text-center">
+						<h4>联系我</h4>
+						<h3>快<span>和我联系吧</span></h3>
+						<span class="border two"></span>
+					</div>
+		<div class="mail_us">
+			<div class="col-md-6 mail_left">
+				<div class="contact-grid1-left">
+					<div class="contact-grid1-left1">
+						<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+						<h4>邮箱联系</h4>
+						<ul>
+							<li>邮箱：<a href="mailto:info@example.com">{{ shoper.uemail }}</a></li>
+						</ul>
+					</div>
+				</div>
+					<div class="contact-grid1-left">
+						<div class="contact-grid1-left1">
+							<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+							<h4>电话联系</h4>
+							<ul>
+								<li>联系电话: {{ shoper.uphone }}</li>
+							</ul>
+						</div>
+					</div>
+					<div class="contact-grid1-left">
+						<div class="contact-grid1-left1">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+							<h4>发货地址</h4>
+							<ul>
+								<li>地址: {{ shoper.uaddress }}</li>
+								<li>收件人：{{ shoper.ushou }}</li>
+							</ul>
+						</div>
+					</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="col-md-6 mail_right">
+				<form action="{% url "df_user:shoper_information" Content.cusername %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="title" required="" value="商品名称">
+					<textarea name="Message" required="">Message...</textarea>
+					<input type="submit" value="什么？想了解商品？发消息给我吧！">
+
+				</form>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+
+<a href="#home" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+	<!--start-smooth-scrolling-->
+						<script type="text/javascript">
+									$(document).ready(function() {
+										/*
+										var defaults = {
+								  			containerID: 'toTop', // fading element id
+											containerHoverID: 'toTopHover', // fading element hover id
+											scrollSpeed: 1200,
+											easingType: 'linear'
+								 		};
+										*/
+
+										$().UItoTop({ easingType: 'easeOutQuart' });
+
+									});
+								</script>
+								<!--end-smooth-scrolling-->
+<!-- //for bootstrap working -->
+	<script src="/static/asserts/js/bootstrap.js"></script>
+{#   消息弹框     #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+
+	</body>
+</html>

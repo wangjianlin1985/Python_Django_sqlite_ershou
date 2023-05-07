@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block script %}
+        <script type="text/javascript">
+            {% if error_info %}
+                xtalert.alertError('{{ error_info }}')
+            {% endif %}
+            {% if info %}
+                 xtalert.alertInfo('{{ info }}')
+            {% endif %}
+            {% if success_info %}
+                 xtalert.alertSuccessToast('{{ success_info }}！');
+            {% endif %}
+        </script>
+ {% endblock %}
+{% block center_body %}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <div class="information clearfix">
+                <a href="/user/myself_information/"><img src="{{ MEDIA_URL }}{{ user.ulogo }}" alt="头像"></a>
+                <div class="information1 clearfix">
+                    {% if user.ucheck_passOrfail == False %}
+                        <a>未实名认证</a>
+                    {% else %}
+                        <a style="color: cyan">已实名认证</a>
+                    {% endif %}
+                </div>
+            </div>
+			<ul>
+                <li><a href="{% url "df_user:info" %}">· 个人信息</a></li>
+                <li><a href="{% url "df_user:check_user" %}">· 实名认证</a></li>
+                <li><a href="{% url "df_user:publishers" %}">· 发布商品</a></li>
+                <li><a href="{% url "df_user:changeInformation" %}">· 修改资料</a></li>
+                <li><a href="{% url "df_user:changeInPwd" %}" class="active">· 修改密码</a></li>
+				<li><a href="{% url "df_user:order" 1 %}">· 全部订单</a></li>
+				<li><a href="{% url "df_user:site" %}">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+
+				<h3 class="common_title2">修改密码</h3>
+				<div class="site_con">
+					<form action="{% url "df_user:changeInPwd" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+						<div class="form_group_logo">
+							<img src="{{ MEDIA_URL }}{{ user.ulogo }}"  alt="头像">
+						</div>
+                        <div class="form_group">
+                            <label>新密码：</label>
+                            <input type="text" name="password">
+                        </div>
+                        <div class="form_group">
+                            <label>确认密码：</label>
+                            <input type="text" name="password2">
+                        </div>
+						<input type="submit" name="" value="修改" class="info_submit">
+					</form>
+				</div>
+		</div>
+	</div>
+
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock center_body %}

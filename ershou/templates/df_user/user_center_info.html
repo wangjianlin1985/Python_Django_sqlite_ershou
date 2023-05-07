@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block center_body %}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+            <div class="information clearfix">
+                <a href="/user/myself_information/"><img src="{{ MEDIA_URL }}{{ user.ulogo }}" alt="头像"></a>
+                <div class="information1 clearfix">
+                    {% if user.ucheck_passOrfail == False %}
+                        <a>未实名认证</a>
+                    {% else %}
+                        <a style="color: cyan">已实名认证</a>
+                    {% endif %}
+                </div>
+            </div>
+			<ul>
+				<li><a href="{% url "df_user:info" %}" class="active">· 个人信息</a></li>
+                <li><a href="{% url "df_user:check_user" %}">· 实名认证</a></li>
+                <li><a href="{% url "df_user:publishers" %}">· 发布商品</a></li>
+                <li><a href="{% url "df_user:changeInformation" %}">· 修改资料</a></li>
+                <li><a href="{% url "df_user:changeInPwd" %}">· 修改密码</a></li>
+				<li><a href="/user/order/1">· 全部订单</a></li>
+				<li><a href="{% url "df_user:site" %}">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<div class="info_con clearfix">
+				<h3 class="common_title2">基本信息</h3>
+						<ul class="user_info_list">
+							<li><span>用户名：</span>{{ user_name }}</li>
+							<li><span>联系方式：</span>{{ user_phone }}</li>
+							<li><span>联系地址：</span>{{ user_address }}</li>
+						</ul>
+				</div>
+            <h3 class="common_title2">{{ explain }}</h3>
+            <div class="has_view_list">
+                <ul class="goods_type_list clearfix">
+                    {%  for good in goods_list %}
+                    <li>
+                        <a href="/detail/{{ good.id }}/"><img src="{{ MEDIA_URL }}{{ good.gpic }}"></a>
+                        <h4><a href="/detail/{{ good.id }}/">{{ good.gtitle }}</a></h4>
+                        <div class="operate">
+                            <span class="prize">￥{{ good.gprice }}</span>
+                            <span class="unit">卖家：{{ good.gunit }}</span>
+                            <a href="/cart/add{{ good.id }}_1/" class="add_goods" title="加入购物车"></a>
+                        </div>
+                    </li>
+                    {% endfor %}
+			</ul>
+            </div>
+		</div>
+	</div>
+    {#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock center_body %}

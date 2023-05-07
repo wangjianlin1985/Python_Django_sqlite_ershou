@@ -1,0 +1,275 @@
+{% extends 'base_foot.html' %}
+{#模板继承于base_foot#}
+
+{% block head %}
+    <script type="text/javascript" src="/static/js/register.js"></script>
+    <script type="text/javascript">
+    $(function(){
+
+	var error_name = false;
+	var error_password = false;
+	var error_check_password = false;
+	var error_email = false;
+	var error_check = false;
+
+
+	$('#user_name').blur(function() {
+		check_user_name();
+	});
+
+	$('#pwd').blur(function() {
+		check_pwd();
+	});
+
+	$('#cpwd').blur(function() {
+		check_cpwd();
+	});
+
+	$('#email').blur(function() {
+		check_email();
+	});
+
+	$('#allow').click(function() {
+		if($(this).is(':checked'))
+		{
+			error_check = false;
+			$(this).siblings('span').hide();
+		}
+		else
+		{
+			error_check = true;
+			$(this).siblings('span').html('请勾选同意');
+			$(this).siblings('span').show();
+		}
+	});
+
+
+	function check_user_name(){
+		var len = $('#user_name').val().length;
+
+		if(len<5||len>20)
+		{
+			$('#user_name').next().html('输入5-20个字符的用户名');
+			$('#user_name').next().show();
+			error_name = true;
+
+		}
+		else
+		{
+			$.get('{% url "df_user:register_exist" %}?uname='+$('#user_name').val(),function(data){
+                if (data.count >= 1) {
+                    $('#user_name').next().html('用户名已经存在').show();
+                    error_name = true;
+                }else{
+                    $('#user_name').next().hide();
+                    error_name = false;
+                }
+            });
+        }
+	}
+
+	function check_pwd(){
+		var len = $('#pwd').val().length;
+		if(len<4||len>20)
+		{
+			$('#pwd').next().html('密码最少4位，最长20位');
+			$('#pwd').next().show();
+			error_password = true;
+		}
+		else
+		{
+			$('#pwd').next().hide();
+			error_password = false;
+		}
+	}
+
+
+	function check_cpwd(){
+		var pass = $('#pwd').val();
+		var cpass = $('#cpwd').val();
+
+		if(pass!=cpass)
+		{
+			$('#cpwd').next().html('两次输入的密码不一致');
+			$('#cpwd').next().show();
+			error_check_password = true;
+		}
+		else
+		{
+			$('#cpwd').next().hide();
+			error_check_password = false;
+		}
+
+	}
+
+	function check_email(){
+		var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+		if(!re.test($('#email').val()))
+		{
+		    $('#email').next().html('你输入的邮箱格式不正确');
+			$('#email').next().show();
+			error_email = true;
+		}
+		else
+		{
+			$.get('{% url "df_user:register_exist" %}?uemail='+$('#email').val(),function(data){
+                if (data.email_count >= 1) {
+                    $('#email').next().html('邮箱已经存在').show();
+                    error_email = true;
+                }else{
+                    $('#email').next().hide();
+                    error_email = false;
+                }
+            });
+		}
+
+	}
+
+
+	$('#reg_form').submit(function() {
+		check_user_name();
+		check_pwd();
+		check_cpwd();
+		check_email();
+
+		if(error_name == false && error_password == false && error_check_password == false && error_email == false && error_check == false)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	});
+});
+    </script>
+{% endblock head %}
+
+{% block body %}
+{#  跳蚤协议  #}
+<div class="shadow clearfix" id="shadow">
+    <div class="close clearfix">
+        <div class="model clearfix">
+            <div class="site_con">
+                <p class="centerAlign" style="color:yellowgreen;text-align: center;font-size: 18px;">跳蚤市场使用协议</p><br /><br />
+
+                    <tr>
+                        <td style="border: none; padding-left: 0;">
+                            一、甲方权利
+
+                                1.甲方在乙方举办的活动,带入自己的物资;
+
+                                2.甲方可以合理要求乙方协助现场实践。
+                        </td><br /><br />
+                        <td style="border: none; padding-left: 0;">
+                            二、甲方义务
+
+                                1.甲方自己所提供的物资，食品饮料类必须在保质期内,电器电子物品必须有三包等,如有
+
+                                发现马上取消参赛资格。售出物资出现质量、安全、保修等问题，纠纷与乙方无关 ,后果全
+
+                                由甲责;
+
+                                2.积极配合乙方参加现场活动,并保证活动正常进行;
+
+                                3.甲方自己提供的物资价格必须合理;
+                        </td><br /><br />
+                        <td style="border: none; padding-left: 0;">
+                            三、乙方权利
+                                1.忆方拥有本次活动全程解析权和组织权;
+                                2.甲方如有违反活动规则，乙方賄取消甲方的活动的资格。
+                        </td><br /><br />
+                        <td style="border: none; padding-left: 0;">
+                            四、乙方义务
+                                1.乙方有义务给甲方宣传本次活动;
+                                2.乙方应准备好现场、活动时间、公平公正。
+                                3.若中途乙方退赛，所交场地费将不予以退还。
+                                4.活动结束后属于乙方的区域应由乙方自己负责清扫，与甲方无关。
+                                5.分配给乙方的桌椅,帐篷等物品都请妥善保管,若有损坏，将于物品的2倍价格赔偿与甲方。
+                        </td><br /><br />
+                        <td style="border: none; padding-left: 0;">
+                            五、争议处理
+                                甲乙双方在出现违约或其它争议时，应本着有好协商,解决矛盾的原则来处理,尽量使事情
+                                有一个圆满的解决方案。如甲乙双方协商不成时，可采取以下方式 :
+                                1.变更和修改合同
+                                2.终止合作协议
+                                3.可向乙方所在的地方人民法院提出诉讼
+                        </td><br /><br />
+                    </tr>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#  跳蚤协议到此为止  #}
+	<div class="register_con">
+		<div class="l_con fl">
+			<a class="reg_logo"><img src="/static/images/logo_banner2.png" style="width: 300px;height:100px;overflow: hidden;object-fit: cover;"></a>
+			<div class="reg_slogan">跳蚤虽小五脏全，东西南北货物多</div>
+			<div class="reg_banner"><img src="/static/images/register_banner.jpg" style="width: 250px;height:330px;overflow: hidden;object-fit: cover;margin-right: 20px;"></div>
+		</div>
+
+		<div class="r_con fr">
+			<div class="reg_title clearfix">
+				<h1>用户注册</h1>
+				<a href="{% url "df_user:login" %}">登录</a>
+			</div>
+			<div class="reg_form clearfix">
+				<form action="{% url "df_user:register_handle" %}" id='reg_form' method="post">
+                    {% csrf_token %}
+				<ul>
+					<li>
+						<label>用户名:</label>
+						<input type="text" name="user_name" id="user_name">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>密码:</label>
+						<input type="password" name="pwd" id="pwd">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>确认密码:</label>
+						<input type="password" name="confirm_pwd" id="cpwd">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>邮箱:</label>
+						<input type="text" name="email" id="email">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li class="agreement">
+						<input type="checkbox" name="allow" id="allow" checked="checked">
+						<label>同意<a href="javascript:void(0)" class="btn">《跳蚤市场使用协议》</a></label>
+						<span class="error_tip2">提示信息</span>
+					</li>
+					<li class="reg_sub">
+						<input type="submit" value="注 册">
+					</li>
+				</ul>				
+				</form>
+			</div>
+
+		</div>
+
+	</div>
+<script type="text/javascript">
+    let btn = document.getElementsByClassName('btn');
+    let shadow = document.getElementById('shadow');
+    for (var i = 0, len = btn.length; i < len; i++) {
+        btn[i].addEventListener('click', function (e) {
+            shadow.className = 'shadow show';
+            return false
+        }, false);
+        shadow.addEventListener('click', function(e) {
+          let target = e.target;
+          let _class = target.className;
+          if(_class.includes('shadow') || _class.includes('close')) {
+            shadow.className = 'shadow'
+          }
+          return false
+         }, false);
+    }
+</script>
+{% endblock body %}

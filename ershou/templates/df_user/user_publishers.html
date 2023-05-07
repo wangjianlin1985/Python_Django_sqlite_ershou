@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block script %}
+        <script type="text/javascript">
+            {% if error_info %}
+                xtalert.alertError('{{ error_info }}')
+            {% endif %}
+            {% if info %}
+                 xtalert.alertInfo('{{ info }}')
+            {% endif %}
+            {% if success_info %}
+                 xtalert.alertSuccessToast('{{ success_info }}！');
+            {% endif %}
+        </script>
+ {% endblock %}
+{% block center_body %}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <div class="information clearfix">
+                <a href="/user/myself_information/"><img src="{{ MEDIA_URL }}{{ user.ulogo }}" alt="头像"></a>
+                <div class="information1 clearfix">
+                    {% if user.ucheck_passOrfail == False %}
+                        <a>未实名认证</a>
+                    {% else %}
+                        <a style="color: cyan">已实名认证</a>
+                    {% endif %}
+                </div>
+            </div>
+			<ul>
+                <li><a href="{% url "df_user:info" %}">· 个人信息</a></li>
+                <li><a href="{% url "df_user:check_user" %}">· 实名认证</a></li>
+                <li><a href="{% url "df_user:publishers" %}" class="active">· 发布商品</a></li>
+                <li><a href="{% url "df_user:changeInformation" %}">· 修改资料</a></li>
+                <li><a href="{% url "df_user:changeInPwd" %}">· 修改密码</a></li>
+				<li><a href="{% url "df_user:order" 1 %}">· 全部订单</a></li>
+				<li><a href="{% url "df_user:site" %}">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+
+				<h3 class="common_title2">商品发布</h3>
+				<div class="site_con">
+					<form action="{% url "df_user:publishers" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+						<div class="form_group">
+							<label>商品名称：</label>
+							<input type="text" name="title">
+						</div>
+                        <div class="form_group">
+                            <label>商品图片：</label>
+                            <input type="file" name="pic">
+                        </div>
+                        <div class="form_group">
+                            <label>价格：</label>
+                            <input type="text" name="price">
+                        </div>
+                        <div class="form_group">
+                            <label>商品简介：</label>
+                            <input type="text" name="jianjie">
+                        </div>
+                        <div class="form_group">
+                            <label>库存：</label>
+                            <input type="text" name="kucun">
+                        </div>
+                        <div class="form_group">
+                            <label>详细描述：</label>
+                            <input type="text" name="content">
+                        </div>
+                        <div class="form_group">
+                            <label>商品类型：</label>
+                            <select name="type_id">
+                                {% for typeinfo in typeinfos %}
+                                <option value="{{ typeinfo.id }}">{{ typeinfo.ttitle }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+						<input type="submit" name="" value="发布" class="info_submit">
+					</form>
+				</div>
+		</div>
+	</div>
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+
+{% endblock center_body %}

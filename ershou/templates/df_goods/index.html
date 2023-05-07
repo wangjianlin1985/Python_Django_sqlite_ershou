@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+{% endblock head %}
+
+{% block center_body %}
+{#  回复评论  #}
+<div class="shadow clearfix" id="shadow">
+    <div class="close clearfix">
+        <div class="model clearfix">
+            <div class="site_con">
+                    <p class="centerAlign" style="color:yellowgreen;text-align: center;font-size: 18px;">跳蚤市场客服为你服务</p><br /><br />
+                    {% if informations1.count == 0 %}
+                        <div class="form_group1">
+                            <div>
+                                <img src="{{ MEDIA_URL }}{{ user_name.ulogo }}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <h6>跳蚤客服:欢迎使用跳蚤市场，很高兴为你服务！</h6>
+                            </div>
+                            <p>{{ nowTime }}</p>
+                        </div>
+                    {% endif %}
+                    {% for information in informations %}
+                        {% if information.cusername == username1 %}
+                        <div class="form_group1">
+                            <div>
+                                <img src="{{ MEDIA_URL }}{{ user_name.ulogo }}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <h6>{{ information.cusername }}:{{ information.ctitle }}，{{ information.ccontent_chart }}</h6>
+                            </div>
+                            <p>{{ information.date_publish }}</p>
+                        </div>
+                        {% elif information.cusername1 == username1 and information.cusername == user.uname %}
+                            <div class="form_group3">
+                                <div>
+                                    <img src="{{ MEDIA_URL }}{{ user.ulogo }}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                    <h6>{{ information.ccontent_chart }}:{{ information.cusername }}</h6>
+                                </div>
+                                <p>{{ information.date_publish }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            </div>
+
+        </div>
+        <form action="{% url "df_goods:index" %}" id="formDetil" class="easyui-form"   method="POST" >
+            {% csrf_token %}
+            <input class="nr" type="text" name="title" required="" placeholder="请输入内容。。。">
+            <input class="sub" type="submit" value="发送">
+        </form>
+    </div>
+  </div>
+
+{#  回复评论到此为止  #}
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="{% url "df_goods:index" %}">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">手机跳蚤</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><img src="/static/images/书籍.jpg" alt="书籍"><a href="#model01" class="fruit">书籍</a></li>
+			<li><img src="/static/images/家电.jpg" alt="家电"><a href="#model02" class="seafood">家电</a></li>
+			<li><img src="/static/images/衣物.jpg" alt="衣物"><a href="#model03" class="meet">衣物</a></li>
+			<li><img src="/static/images/出行.jpg" alt="出行"><a href="#model04" class="egg">出行</a></li>
+			<li><img src="/static/images/乐器.jpg" alt="乐器"><a href="#model05" class="vegetables">乐器</a></li>
+			<li><img src="/static/images/智能_03.jpg" alt="智能"><a href="#model06" class="ice">智能</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide07.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide05.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide06.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide01.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv03.jpg"></a>
+			<a href="#"><img src="/static/images/adv05.jpg"></a>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model01">书籍</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+                {% for g in type01 %}
+                    <a href="/detail/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+{#                    这里建立一个点击量前四位的商品的链接#}
+{#                    模板过滤器slice, 取变量前 N 个字符，可用于中文 #}
+                {%  endfor %}
+			</div>
+			<a href="/list1_1_1/" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner.jpg"></div>
+			<ul class="goods_list fl">
+                {% for goods in type0 %}
+{#                    按照商品的最新上穿建立显示#}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model02">家电</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+{#				<a href="#">河虾</a>#}
+{#				<a href="#">扇贝</a>				#}
+                {% for g in type1 %}
+                    <a href="/detail/{{ g.id }}/">{{ g.gtitle|slice:'10' }}</a>
+                {% endfor %}
+			</div>
+			<a href="/list2_1_1/" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner1.jpg"></div>
+			<ul class="goods_list fl">
+                {% for goods in type11 %}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+{#                    静态文件添加目录static前一定加"/"#}
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model03">衣物</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				{% for g in type2 %}
+                    <a href="/detail/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+{#                    这里建立一个点击量前四位的商品的链接#}
+{#                    模板过滤器slice, 取变量前 N 个字符，可用于中文 #}
+                {%  endfor %}
+			</div>
+			<a href="/list3_1_1/" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner3.jpg"></div>
+			<ul class="goods_list fl">
+				{% for goods in type21 %}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+{#                    静态文件添加目录static前一定加"/"#}
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model04">出行</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				{% for g in type3 %}
+                    <a href="/detail/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+{#                    这里建立一个点击量前四位的商品的链接#}
+{#                    模板过滤器slice, 取变量前 N 个字符，可用于中文 #}
+                {%  endfor %}
+			</div>
+			<a href="/list4_1_1/" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner5.jpg"></div>
+			<ul class="goods_list fl">
+				{% for goods in type31 %}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+{#                    静态文件添加目录static前一定加"/"#}
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model05">乐器</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				{% for g in type4 %}
+                    <a href="/detail/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+{#                    这里建立一个点击量前四位的商品的链接#}
+{#                    模板过滤器slice, 取变量前 N 个字符，可用于中文 #}
+                {%  endfor %}
+			</div>
+			<a href="/list5_1_1/" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner6.jpg"></div>
+			<ul class="goods_list fl">
+				{% for goods in type41 %}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+{#                    静态文件添加目录static前一定加"/"#}
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model06">智能</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				{% for g in type5 %}
+                    <a href="/detail/{{ g.id }}/">{{  g.gtitle|slice:'10' }}</a>
+{#                    这里建立一个点击量前四位的商品的链接#}
+{#                    模板过滤器slice, 取变量前 N 个字符，可用于中文 #}
+                {%  endfor %}
+			</div>
+			<a href="/list6_1_1/" class="goods_more fr">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/images/banner7.jpg"></div>
+			<ul class="goods_list fl">
+				{% for goods in type51 %}
+                <li>
+                    <h4><a href="/detail/{{ goods.id }}/">{{ goods.gtitle }}</a></h4>
+                    <a href="/detail/{{ goods.id }}/"><img src="{{ MEDIA_URL }}{{ goods.gpic }}"></a>
+{#                    静态文件添加目录static前一定加"/"#}
+                    <div class="prize"> ￥ {{ goods.gprice }} </div>
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+<div class="tools">
+        <img src="../../static/images/top_tool.jpg" alt="">
+    </div>
+    <div class="tools_shixian">
+        <div>
+            <a href="#header_con">
+                <button type="submit" name="submit1">
+                </button>
+            </a>
+        </div>
+        <div>
+            <a href="https://weibo.com/">
+                <button type="submit" name="submit2">
+                </button>
+            </a>
+        </div>
+        <div>
+            <a href="http://t.qq.com/">
+                <button type="submit" name="submit3">
+                </button>
+            </a>
+        </div>
+        <div>
+            <a href="https://wx.qq.com/">
+                <button type="submit" name="submit4">
+                </button>
+            </a>
+        </div>
+        <div>
+            <a href="https://w.qq.com/">
+                <img src="../../static/images/qq.jpg" style="width: 40px;height: 40px;overflow: hidden;object-fit: cover;" alt="">
+                <button type="submit" name="submit5" class="submit5">
+                </button>
+            </a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" onclick="quote_comment('${goodsContent}')" class="btn">
+                <img src="../../static/images/lianxigefu.jpg" style="width: 40px;height: 40px;overflow: hidden;object-fit: cover;" alt="">
+                <button type="submit" name="submit6" class="submit6">
+                </button>
+            </a>
+        </div>
+    </div>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+    <script type="text/javascript">
+        BCSlideshow('focuspic');
+        var oFruit = document.getElementById('fruit_more');
+        var oShownum = document.getElementById('show_count');
+
+        var hasorder = localStorage.getItem('order_finish');
+
+        if(hasorder)
+        {
+        oShownum.innerHTML = '2';
+        }
+
+        oFruit.onclick = function(){
+        window.location.href = 'list.html';
+        }
+    </script>
+
+
+<script type="text/javascript">
+    let btn = document.getElementsByClassName('btn');
+    let shadow = document.getElementById('shadow');
+    for (var i = 0, len = btn.length; i < len; i++) {
+        btn[i].addEventListener('click', function (e) {
+            shadow.className = 'shadow show';
+            return false
+        }, false);
+        shadow.addEventListener('click', function(e) {
+          let target = e.target;
+          let _class = target.className;
+          if(_class.includes('shadow') || _class.includes('close')) {
+            shadow.className = 'shadow'
+          }
+          return false
+         }, false);
+    }
+</script>
+{#  弹窗提示  #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+{% endblock center_body %}
